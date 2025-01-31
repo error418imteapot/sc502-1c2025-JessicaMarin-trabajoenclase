@@ -1,0 +1,59 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    background-color: #333;
+    padding: 10px;
+}
+
+.navbar {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+}
+
+.navbar a:hover {
+    background-color: #575757;
+
+}
+
+aside {
+    width: 200px;
+    background-color: #f4f4f4;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0, 1);
+}
+
+aside h4 {
+    color: #333;
+}
+
+aside ul {
+    list-style-type: none;
+}
+aside ul li{
+    margin-bottom: 10px;
+
+}
+aside ul li a{
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+aside ul li a:hover{
+    color: #e74c3c;
+}
+.productos{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.tarjeta-producto{
+    width: 250px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 20px;
+    text-align: center;
+    box-shadow: x 4px 8px rgba(0, 0, 0, 0, 1);
+}
