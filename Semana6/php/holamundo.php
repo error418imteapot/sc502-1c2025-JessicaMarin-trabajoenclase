@@ -65,8 +65,6 @@
             echo "Necesitas mejorar";
             break;
     }
-
-
     ?>
 </body>
 
