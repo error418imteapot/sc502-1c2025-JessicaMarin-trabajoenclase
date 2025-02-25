@@ -79,6 +79,20 @@
 
         </table>
     </div>
+    <script>
+        //declaramos la variavle toggleButton
+        let toggleButton = document.getElementById('toggleDarkMode');
+        let body = document.body;
+
+        //el boton reacciona al listener, al hacer clic queremos que realice la siguiente funcion
+        toggleButton.addEventListener('click', function(){
+            body.classList.toggle('dark-mode');
+            toggleButton.textContent = body.classList.contains('dark-mode') ? 'Modo claro' : 'Modo oscuro';
+        })
+
+
+
+    </script>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
