@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function(){
             //aqui vamos a tener un element del arreglo de tareas por cada uno de los elementos
             const taskCard = document.createElement('div');
             taskCard.className = 'col-md-4 mb-3';
+            //todo dentro de este simbolo ` es puro string
             taskCard.innerHTML = `
             <div class="card">
                 <div class="card-body">
