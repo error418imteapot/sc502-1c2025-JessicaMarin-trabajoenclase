@@ -8,15 +8,22 @@
 <body>
     <?php
     echo "<p>Hola mundo en PHP</p>";
-    // declaracion de variables
-    $nombre = "Jess";//variable global, puede ser accedida desde cualquier funcion
+    // declaracion de variables con el signo de $ y luego el nombre de la variable
+    //las variables fuera de una funcion son variables global
+    //puede ser accedida desde cualquier funcion
+    $nombre = "Jess"; 
     $contador = 9;
     $peso = 69.7;
     $mayorEdad = true;
 
+    //si quiero usar una variable global dentro de una funcion, 
+    //se llama en la funcion con la palabra reservada global seguido del nombre de la variable
+
     function miFunction()
+    //una variable dentro de una funcion: variable local
+    //solo tiene vida dentro de la funcion
     {
-        $variableLocal = "Variable local"; //solo tiene vida dentre dela funcion
+        $variableLocal = "Variable local"; 
         $nombre = "Juan";
         echo $variableLocal;
     }
