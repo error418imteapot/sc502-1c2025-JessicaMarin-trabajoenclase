@@ -35,30 +35,53 @@ $arreglo1 = array("Rojo", "Verde");
 $arreglo2 = array("Azul", "Amarillo");
 $arregloFusionado = array_merge($arreglo1, $arreglo2);
 print_r($arregloFusionado);
- 
-//***39min***
 
 
 
-// //function simple
-// function saludar($nombre){
-//     return "Hola ". $nombre;
-// }
-// echo saludar("Marlon") . PHP_EOL;
+//funcion simple recibe/retorna aun valor
+function saludar($nombre){
+    return "Hola ". $nombre;
+}
+echo saludar("Jess") . PHP_EOL;
  
-// //funcion anonima
-// $suma = function ($a,$b){
-//     return $a + $b;
-// };
+//funcion anonima: podemos tener dentro de una variable y despues solo se llama a la variable
+//declaramos la variable suma y se le asigna la funcion y los varoles de esaf uncion
+$suma = function ($a,$b){
+    return $a + $b;
+};
+echo $suma(5,10). PHP_EOL;
  
-// echo $suma(5,10). PHP_EOL;
+//funcion de flecha: se asigna a una variable y se desarrolla mas sencillo/menos codigo
+$duplicar = fn($n) => $n * 2;
+echo $duplicar(20) . PHP_EOL;
  
-// //funcion de flecha
-// $duplicar = fn($n) => $n * 2;
-// echo $duplicar(10) . PHP_EOL;
- 
-// //function integrada
-// $texto = "Hola Mundo";
-// echo strlen($texto);
- 
+//function integrada: que ya existe en el lenguaje
+$texto = "Hola Mundo";
+echo strlen($texto);
+
+
+//crear y escribir en un archivo
+//abrir un archivo //mode W es para escritura // or die mata el proceso y no se abre el archivo
+$archivo = fopen("ejemplo.txt","w") or die("no se puede abrir el archivo");
+// \n salto de linea
+$txt = "Hola Mundo! \n";
+fwrite($archivo,$txt);
+$txt = "PHP Es genial!";
+fwrite($archivo,$txt);
+fclose($archivo);
+//toddo esto genero el archivo .txt en la carpeta
+
+
+//leer un archivo + manejo de errores con el bloque try - catch
+try {
+    $archivoPorLeer = fopen("ejemplo.txt","r") or die("No se puede abrir");
+//end of file para saber si llegamos al final del archivo
+while(!feof($archivoPorLeer)){
+    echo fgets($archivoPorLeer);
+}
+fclose($archivoPorLeer);
+}catch(Exception $e){
+    echo "Error: " . $e -> getMessage();
+}
+
 ?>
