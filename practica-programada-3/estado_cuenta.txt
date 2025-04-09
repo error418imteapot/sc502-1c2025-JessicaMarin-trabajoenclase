@@ -1,0 +1,11 @@
+Detalle de Transacciones:
+ID: 1 - Compra en Supermercado - Monto: $100.50
+ID: 2 - Pago de servicio de streaming - Monto: $15.99
+ID: 3 - Cena en restaurante - Monto: $45.25
+ID: 4 - Compra de ropa - Monto: $80.00
+
+RESUMEN DEL ESTADO DE CUENTA:
+Monto total de contado: $241.74
+Monto total con interés (2.6%): $248.03
+Cashback aplicado (0.1%): $0.24
+Monto final a pagar: $247.78
