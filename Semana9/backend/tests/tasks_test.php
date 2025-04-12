@@ -14,7 +14,6 @@ if($tareas){
 }
  
 echo "Actualizando una tarea\n";
-//lamamaos al metodo edittask
 if(editTask($idTarea,"tarea editada", "tarea editada desde el test",'2025-05-01')){
     echo "Tarea editada \n";
 }

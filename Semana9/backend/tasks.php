@@ -20,7 +20,7 @@ function createTask($userId, $title, $description, $dueDate){
     }
 }
  //funicon retorna tareas por usuario
-function getTasksByUser($userId){
+ function getTasksByUser($userId){
     try{
         global $pdo;
         $stmt = $pdo -> prepare("SELECT * FROM tasks where user_id = :user_id");
@@ -44,7 +44,7 @@ function editTask($id, $title, $description, $dueDate)
             'due_date' => $dueDate,
             'id' => $id
         ]);
-        //si la cantidad de filas editadas es mayor a cero, retorne true, sino, retorna false
+        //si la cantidad de filas editadas es mayor a cero, retorne true, sino, retorne false;
  
         return $stmt->rowCount() > 0;
     } catch (Exception $e) {

@@ -17,12 +17,12 @@ function userRegistry($username, $password, $email){
         return "User registered";
         
     }catch(Exception $e){
-
+ 
     }
 }
 
-$method = $_SERVER['REQUEST_METHOD'];
-
+$method= $_SERVER['REQUEST_METHOD'];
+ 
 if ($method == 'POST') {
     if (isset($_POST['email']) && isset($_POST['password'])) {
         //logica para manejar el post. los datos van a llegar en formato "formulario" no en JSON

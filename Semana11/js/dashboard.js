@@ -28,12 +28,12 @@ document.addEventListener('DOMContentLoaded', function () {
         description: "Check deploy steps",
         dueDate: "2024-12-01",
     }];
- 
-    //carga las tareas en el dom
+
     function loadTasks() {
         const taskList = document.getElementById('task-list');
         taskList.innerHTML = '';
         tasks.forEach(function (task) {
+
             let commentsList = '';
             if (task.comments && task.comments.length > 0) {
                 commentsList = '<ul class="list-group list-group-flush">';
@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 }); 
                 commentsList += '</ul>';
             }
-            //aqui vamos a tener un element del arreglo de tareas por cada uno de los elementos
             const taskCard = document.createElement('div');
             taskCard.className = 'col-md-4 mb-3';
             taskCard.innerHTML = `

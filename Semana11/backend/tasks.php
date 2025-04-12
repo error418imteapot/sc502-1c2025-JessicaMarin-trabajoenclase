@@ -1,39 +1,37 @@
 <?php
 require('db.php');
-
-function createTask($userId, $title, $description, $dueDate)
-{
+//creando las funicones de crear las tareas 
+function createTask($userId, $title, $description, $dueDate){
     global $pdo;
-    try {
+    try{
         $sql = "insert into tasks (user_id, title, description, due_date) value (:user_id, :title, :description, :due_date)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([
+        $stmt = $pdo -> prepare($sql);
+        $stmt -> execute([
             'user_id' => $userId,
             'title' => $title,
-            'description' => $description,
+            'description'=> $description,
             'due_date' => $dueDate
         ]);
-        return $pdo->lastInsertId();
-
-    } catch (Exception $e) {
-        echo $e->getMessage();
+        return $pdo -> lastInsertId();
+ 
+    }catch(Exception $e){
+        echo $e -> getMessage();
         return 0;
     }
 }
-
-function getTasksByUser($userId)
-{
-    try {
+ //funicon retorna tareas por usuario
+ function getTasksByUser($userId){
+    try{
         global $pdo;
-        $stmt = $pdo->prepare("SELECT * FROM tasks where user_id = :user_id");
+        $stmt = $pdo -> prepare("SELECT * FROM tasks where user_id = :user_id");
         $stmt->execute(['user_id' => $userId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (Exception $ex) {
-        echo "Error al obtener las tareas del usuario" . $ex->getMessage();
+    }catch(Exception $ex){
+        echo "Error al obtener las tareas del usuario" . $ex-> getMessage();
         return [];
     }
 }
-
+ 
 function editTask($id, $title, $description, $dueDate)
 {
     global $pdo;
@@ -47,14 +45,14 @@ function editTask($id, $title, $description, $dueDate)
             'id' => $id
         ]);
         //si la cantidad de filas editadas es mayor a cero, retorne true, sino, retorne false;
-
+ 
         return $stmt->rowCount() > 0;
     } catch (Exception $e) {
         echo $e->getMessage();
-        return false;
+        return 0;
     }
 }
-
+ 
 function deleteTask($id)
 {
     global $pdo;
@@ -68,11 +66,4 @@ function deleteTask($id)
         echo $e->getMessage();
         return false;
     }
-}
-
-$method = $_SERVER['REQUEST_METHOD'];
-header('Content-Type: application/json');
-
-function getJsonInput(){
-    return json_decode(file_get_contents("php://input"), associative:true);
 }

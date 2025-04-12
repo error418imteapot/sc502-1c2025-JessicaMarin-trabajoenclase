@@ -1,37 +1,37 @@
 <?php
 require('db.php');
-
-function login($username, $password)
-{
-    global $pdo;
-
-    $sql = 'Select * from users where username = :username';
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute(['username' => $username]);
-    //para obtener informacion. retorna los datos como un array asociativo
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
  
-    if ($user) {
-        if (password_verify($password, $user['password'])) {
-            session_start();
-            $_SESSION['user_id'] = $user["id"];
+function login($username, $password){
+    global $pdo;
+ 
+    $sql = 'Select * from users where username = :username';
+    $stmt = $pdo -> prepare($sql);
+    $stmt -> execute(['username' => $username]);
+    //para obtener informacion. retorna los datos como un array asociativo
+    $user = $stmt -> fetch(PDO::FETCH_ASSOC); 
+ 
+    if($user){
+        //muestro los datos que estan en mi BD y fue resultado del fetch
+        // echo $user['username'];
+        // echo $user['email'];
+        //estos echo se pueden eliminar para que no se vean los datos
+        if(password_verify($password,$user['password'])){
             return true;
         }
     }
     return false;
 }
 
-//guardar el tipo de solicitud.
+///guardar el tipo de solicitud.
 $method = $_SERVER["REQUEST_METHOD"];
-
+ 
 if ($method == 'POST') {
-    //metodo global $ para saber si la variable esta inicializada (email o pass)
     if (isset($_POST['email']) && isset($_POST['password'])) {
-        //logica para manejar el post 
-        //los datos van a llegar en "formulario" no en JSON
+        //logica para manejar el post. los datos van a llegar en formato "formulario" no en JSON
         $username = $_POST['email'];
         $password = $_POST['password'];
         if (login($username, $password)) {
+            session_start();
             http_response_code(200);
             echo json_encode(["message" => "Login exitoso"]);
         } else {
@@ -44,4 +44,5 @@ if ($method == 'POST') {
     }
 } else {
     http_response_code(response_code: 405);//metodo no permitido
-    echo json_encode(["error" => "Metodo no permitido"]);}
+    echo json_encode(["error" => "Metodo no permitido"]);
+}
