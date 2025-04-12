@@ -1,177 +1,198 @@
-document.addEventListener('DOMContentLoaded', function(){
- 
-    // Datos ficticios para tareas
-    const tasks = [
-        {
-            id: 1,
-            title: "Complete Project Report",
-            description: "Prepare and submit the final project report by the end of the week.",
-            due_date: "2024-08-25",
-            comments: []
-        },
-        {
-            id: 2,
-            title: "Team Meeting",
-            description: "Schedule a team meeting to discuss the next sprint.",
-            due_date: "2024-08-26",
-            comments: []
-        },
-        {
-            id: 3,
-            title: "Code Review",
-            description: "Review the codebase and ensure all pull requests are merged.",
-            due_date: "2024-08-27",
-            comments: []
-        }
-    ];    
- 
-    let editingTaskId = null;
-    let taskCounter = tasks.length;
- 
-    //carga las tareas en el dom
-    function loadTasks(){
+document.addEventListener('DOMContentLoaded', function () {
+
+    let isEditMode = false;
+    let edittingId;
+    const tasks = [{
+        id: 1,
+        title: "Complete project report",
+        description: "Prepare and submit the project report",
+        dueDate: "2024-12-01",
+        comments: [{ id: 1, description: "There is too many tasks pending" }, { id: 2, description: "It needs to be a complete report" }]
+    },
+    {
+        id: 2,
+        title: "Team Meeting",
+        description: "Get ready for the season",
+        dueDate: "2024-12-01",
+    },
+    {
+        id: 3,
+        title: "Code Review",
+        description: "Check partners code",
+        dueDate: "2024-12-01",
+
+    },
+    {
+        id: 4,
+        title: "Deploy",
+        description: "Check deploy steps",
+        dueDate: "2024-12-01",
+    }];
+
+    function loadTasks() {
         const taskList = document.getElementById('task-list');
         taskList.innerHTML = '';
- 
-        tasks.forEach(function(task){
-            //aqui vamos a tener un element del arreglo de tareas por cada uno de los elementos
+        tasks.forEach(function (task) {
+
+            let commentsList = '';
+            if (task.comments && task.comments.length > 0) {
+                commentsList = '<ul class="list-group list-group-flush">';
+                task.comments.forEach(comment => {
+                    commentsList += `<li class="list-group-item">${comment.description} 
+                    <button type="button" class="btn btn-sm btn-link remove-comment" data-visitid="${task.id}" data-commentid="${comment.id}">Remove</button>
+                    </li>`;
+                }); 
+                commentsList += '</ul>';
+            }
             const taskCard = document.createElement('div');
             taskCard.className = 'col-md-4 mb-3';
             taskCard.innerHTML = `
             <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">${task.title}</h5>
-                        <p class="card-text">${task.description}</p>
-                        <p class="card-text text-muted">${task.due_date}</p>
-                    </div>
-                    <div class="card-footer d-flex justify-content-between">
-                        <button class="btn btn-secondary btn-sm edit-task" data-id="${task.id}">Edit</button>
-                        <button class="btn btn-danger btn-sm delete-task" data-id="${task.id}">Delete</button>
-                    </div>
-                    <div class="mt-3">
-                        <h6>Comentarios</h6>
-                        <ul class="list-group" id="comments-${task.id}">
-                            ${task.comments.map(comment => `
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    ${comment}
-                                    <button class="btn btn-danger btn-sm" onclick="deleteComment(${task.id}, '${comment}')">Eliminar</button>
-                                </li>
-                            `).join('')}
-                        </ul>
-                        <div class="mt-2">
-                            <input type="text" id="new-comment-${task.id}" class="form-control" placeholder="Agregar un comentario">
-                            <button class="btn btn-primary btn-sm mt-2" onclick="addComment(${task.id})">Añadir Comentario</button>
-                        </div>
-                    </div>
+                <div class="card-body">
+                    <h5 class="card-title">${task.title}</h5>
+                    <p class="card-text">${task.description}</p>
+                    <p class="card-text"><small class="text-muted">Due: ${task.dueDate}</small> </p>
+                    ${commentsList}
+                     <button type="button" class="btn btn-sm btn-link add-comment"  data-id="${task.id}">Add Comment</button>
+
                 </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <button class="btn btn-secondary btn-sm edit-task"data-id="${task.id}">Edit</button>
+                    <button class="btn btn-danger btn-sm delete-task" data-id="${task.id}">Delete</button>
+                </div>
+            </div>
             `;
             taskList.appendChild(taskCard);
         });
 
-        console.log(tasks);
- 
-        //selecciona todos los botones que tengan la clase edit-task
-        document.querySelectorAll('.edit-task').forEach(function(btnEdit){
-            //para cada boton, vamos a manajar el evento click, este evento lo va a manejar la funcion handleEditTask
-            //definida mas abajo.
-            btnEdit.addEventListener('click', handleEditTask);
+        document.querySelectorAll('.edit-task').forEach(function (button) {
+            button.addEventListener('click', handleEditTask);
         });
- 
-        document.querySelectorAll('.delete-task').forEach(function(btnDelete){
-            //para cada boton, vamos a manajar el evento click, este evento lo va a manejar la funcion handleEditTask
-            //definida mas abajo.
-            btnDelete.addEventListener('click', handleDeleteTask);
+
+        document.querySelectorAll('.delete-task').forEach(function (button) {
+            button.addEventListener('click', handleDeleteTask);
         });
-    
+
+        document.querySelectorAll('.add-comment').forEach(function (button) {
+            button.addEventListener('click', function (e) {
+                // alert(e.target.dataset.id);
+                document.getElementById("comment-task-id").value = e.target.dataset.id;
+                const modal = new bootstrap.Modal(document.getElementById("commentModal"));
+            modal.show()
+
+            })
+        });
+        document.querySelectorAll('.remove-comment').forEach(function (button) {
+            button.addEventListener('click', function (e) {
+                let taskId = parseInt(e.target.dataset.visitid);
+                let commentId = parseInt(e.target.dataset.commentid);
+                selectedTask = tasks.find(t => t.id === taskId);
+                commentIndex = selectedTask.comments.findIndex(c => c.id === commentId);
+                selectedTask.comments.splice(commentIndex,1);
+                loadTasks();
+            })
+        });
     }
 
-    window.addComment = function(taskId) {
-        const commentInput = document.getElementById(`new-comment-${taskId}`);
-        const comment = commentInput.value.trim();
-        if (comment) {
+    function handleEditTask(event) {
+        try {
+            // alert(event.target.dataset.id);
+            //localizar la tarea quieren editar
+            const taskId = parseInt(event.target.dataset.id);
             const task = tasks.find(t => t.id === taskId);
-            task.comments.push(comment);
-            commentInput.value = '';
-            loadTasks();
+            //cargar los datos en el formulario 
+            document.getElementById('task-title').value = task.title;
+            document.getElementById('task-desc').value = task.description;
+            document.getElementById('due-date').value = task.dueDate;
+            //ponerlo en modo edicion
+            isEditMode = true;
+            edittingId = taskId;
+            //mostrar el modal
+            const modal = new bootstrap.Modal(document.getElementById("taskModal"));
+            modal.show();
+
+
+        } catch (error) {
+            alert("Error trying to edit a task");
+            console.error(error);
         }
     }
 
-    window.deleteComment = function(taskId, comment) {
-        const task = tasks.find(t => t.id === taskId);
-        const commentIndex = task.comments.indexOf(comment);
-        if (commentIndex > -1) {
-            task.comments.splice(commentIndex, 1);
-            loadTasks();
-        }
-    }
- 
-    function handleEditTask(event){
-        // alert('se presiono el boton con taskid ' + event.target.dataset.id);
-        //obtener la tarea que el usuario selecciono
-        editingTaskId = parseInt(event.target.dataset.id);
-        //buscar la informacion de la tarea en el arreglo de tareas
-        const task = tasks.find(t => t.id === editingTaskId);
-        //cargar la tarea en el formulario
-        document.getElementById('task-title').value = task.title;
-        document.getElementById('task-desc').value = task.description;
-        document.getElementById('due-date').value = task.due_date;
-        //cambiar el titulo del modal
-        document.getElementById('taskModalLabel').textContent = 'Edit task';
-        //abrir el modal
-        const modal = new bootstrap.Modal(document.getElementById('taskModal'));
-        modal.show();
-    }
- 
-    function handleDeleteTask(event){
+
+    function handleDeleteTask(event) {
+        // alert(event.target.dataset.id);
         const id = parseInt(event.target.dataset.id);
-        const taskIndex = tasks.findIndex( t => t.id === id);
-        tasks.splice(taskIndex,1);
+        const index = tasks.findIndex(t => t.id === id);
+        tasks.splice(index, 1);
         loadTasks();
     }
- 
-    document.getElementById('task-form').addEventListener('submit',function(e){
+
+    document.getElementById('comment-form').addEventListener('submit', function (e){
         e.preventDefault();
-        const title = document.getElementById('task-title').value;
-        const description = document.getElementById('task-desc').value;
-        const dueDate = document.getElementById('due-date').value;
- 
-        if(!editingTaskId){
-            //modo agregar tarea
-            taskCounter = taskCounter + 1;
-            const newTask = {
-                id: taskCounter,
-                title:title,
-                description: description,
-                due_date: dueDate
-            };
-            tasks.push(newTask);
+        const comment = document.getElementById('task-comment').value;
+        const selectedTask = parseInt(document.getElementById('comment-task-id').value);
+        const task = tasks.find(t=> t.id === selectedTask);
+
+
+        let nextCommentId = 1;
+         
+        if(task.comments){
+            nextCommentId = task.comments.length + 1;
         }else{
-            //modo de edicion
-            let task = tasks.find( t => t.id === editingTaskId);
-            task.title = title;
-            task.description = description;
-            task.due_date = dueDate;
+            task.comments = [];
         }
         
+        task.comments.push({id: nextCommentId, description: comment});
+        const modal = bootstrap.Modal.getInstance(document.getElementById('commentModal'));
+        modal.hide();
+        loadTasks();
+
+    })
+
+    document.getElementById('task-form').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const title = document.getElementById("task-title").value;
+        const description = document.getElementById("task-desc").value;
+        const dueDate = document.getElementById("due-date").value;
+
+        if (isEditMode) {
+            //todo editar
+            const task = tasks.find(t => t.id === edittingId);
+            task.title = title;
+            task.description = description;
+            task.dueDate = dueDate;
+        } else {
+            const newTask = {
+                id: tasks.length + 1,
+                title: title,
+                description: description,
+                dueDate: dueDate
+            };
+            tasks.push(newTask);
+        }
         const modal = bootstrap.Modal.getInstance(document.getElementById('taskModal'));
         modal.hide();
         loadTasks();
     });
- 
-    document.getElementById('taskModal').addEventListener('show.bs.modal',function(){
-        if(!editingTaskId){
-            //solo si estamos en modo agregar
-            document.getElementById('task-form').reset();
-            document.getElementById('taskModalLabel').textContent = 'Add Task';
-        }
-        
-    });
- 
-    document.getElementById('taskModal').addEventListener('hidden.bs.modal', function(){
-        editingTaskId = null;
+
+    document.getElementById('commentModal').addEventListener('show.bs.modal', function(){
+        document.getElementById('comment-form').reset();
     })
- 
- 
+
+    document.getElementById('taskModal').addEventListener('show.bs.modal', function () {
+        if (!isEditMode) {
+            document.getElementById('task-form').reset();
+            // document.getElementById('task-title').value = "";
+            // document.getElementById('task-desc').value = "";
+            // document.getElementById('due-date').value = "";
+        }
+    });
+
+    document.getElementById("taskModal").addEventListener('hidden.bs.modal', function () {
+        edittingId = null;
+        isEditMode = false;
+    })
     loadTasks();
- 
+
 });

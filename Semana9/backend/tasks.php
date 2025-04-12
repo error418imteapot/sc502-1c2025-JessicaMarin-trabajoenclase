@@ -1,6 +1,6 @@
 <?php
 require('db.php');
- 
+//creando las funicones de crear las tareas 
 function createTask($userId, $title, $description, $dueDate){
     global $pdo;
     try{
@@ -19,7 +19,7 @@ function createTask($userId, $title, $description, $dueDate){
         return 0;
     }
 }
- 
+ //funicon retorna tareas por usuario
 function getTasksByUser($userId){
     try{
         global $pdo;
@@ -44,7 +44,7 @@ function editTask($id, $title, $description, $dueDate)
             'due_date' => $dueDate,
             'id' => $id
         ]);
-        //si la cantidad de filas editadas es mayor a cero, retorne true, sino, retorne false;
+        //si la cantidad de filas editadas es mayor a cero, retorne true, sino, retorna false
  
         return $stmt->rowCount() > 0;
     } catch (Exception $e) {

@@ -1,4 +1,5 @@
 <?php
+//nombres de las variables $:
 $host = "localhost";
 $dbname = "todo_app";
 $user= "root";

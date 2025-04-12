@@ -1,24 +1,34 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function(){
     const registerForm = document.getElementById('register-form');
     const registerError = document.getElementById('register-error');
-    const registerSuccess = document.getElementById('register-success');
-    registerForm.addEventListener('submit', function (e) {
+
+    registerForm.addEventListener('submit', function(e){
         e.preventDefault();
+
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-        const passwordConfirm = document.getElementById('confirm-password').value;
- 
-        if(password !== passwordConfirm){
-            registerError.style.display = 'block';
-            registerSuccess.style.display = 'none';
-        }else{
-            registerError.style.display = 'none';
-            registerSuccess.style.display = 'block';
-            //para que en n tiempo nos redirija a x pagina (3s)
+        const confirmPassword = document.getElementById('confirm-password').value;
+        const errormsg = "Password and confirmation don't match";
+
+        if(password !== confirmPassword){
+            registerError.innerHTML = `<div class="alert alert-danger fade show" role="alert">
+            <strong>Error:</strong> ${errormsg}
+            </div>`;
+            return;
+        }else  {
+            registerError.innerHTML = `<div class="alert alert-success fade show" role="alert">
+            <strong>Success:</strong> Email: ${email} successfully registered.
+            </div>`;
             setTimeout(function(){
+                registerError.innerHTML = "";
                 window.location.href = "index.html";
-            },3000)
-            registerForm.reset();
+            }, 5000)
+
+         
         }
+
+
+
     })
+
 });
